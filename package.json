@@ -1,0 +1,20 @@
+{
+  "name": "url_shortener",
+  "version": "1.0.0",
+  "description": "url shortener for FreeCodeCamp project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "url",
+    "shortener"
+  ],
+  "author": "Ronald Blanco",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "mongodb": "^2.2.26"
+  }
+}
