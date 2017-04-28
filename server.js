@@ -1,11 +1,14 @@
-var port = process.env.PORT || 5000 || 8080;//FOR HEROKU port Asignation
+var port = /*process.env.PORT || 5000 || */8080;//FOR HEROKU port Asignation
 var express = require('express');
+var mongo = require('mongodb').MongoClient;
+var mongourl = "mongodb://localhost:27017/";
+var dbname = "";
 //var url = require('url');
 var app = express();
 
-/*app.get('/', function(req, res){
+app.get('/', function(req, res){
     res.sendFile(__dirname + '/views/index.html');
-});*/
+});
 
 app.get('*', function (req, res) {
     
