@@ -201,7 +201,24 @@ app.get('*', function (req, res) {
     console.log(href.toString());
     var id = href.toString().split('/')[1];
     
-    mongo.connect(mongourl+dbname,function(err,db){
+    //check if the short exist
+    //fCheckurl(req.protocol + '://' + req.get('host') + '/checkurl/' + final);
+    request(req.protocol + '://' + req.get('host') + '/checkshort/' + id, function (error, response, body) {
+        //console.log('error:', error); // Print the error if one occurred 
+        //console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
+        console.log('body:', JSON.parse(body).doc.length); // Print the HTML for the Google homepage. 
+        //var newDoc = undefined;
+        var checkurl = [];
+        if(error == null){
+            checkurl = JSON.parse(body);
+            if(checkurl.doc.length > 0) res.redirect(checkurl.doc[0].org_url);//OK READY
+            else if (checkurl.doc.length === 0) res.send("Not a Valid Shortener!");
+            else res.send('Error Accesing Database!');
+            //console.log('newDoc in function->'+newDoc);
+        }
+    });
+    
+    /*mongo.connect(mongourl+dbname,function(err,db){
         if(err)throw err;
         var collection = db.collection('shortener');
         
@@ -214,7 +231,7 @@ app.get('*', function (req, res) {
             res.redirect(doc[0].org_url);//OK READY
         })
         db.close();
-    })
+    })*/
     
 });
 
