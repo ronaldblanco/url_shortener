@@ -4,12 +4,40 @@ var mongo = require('mongodb').MongoClient;
 var mongourl = "mongodb://localhost:27017/";
 var dbname = "urlshortener";
 var url = require('url');
+var request = require('request');
 var app = express();
+
+var newDoc = undefined;
 
 var randomIdGenerator = require('random-id-generator');
 //let defaultLengthId = randomIdGenerator();
 //defaultLengthId 3KDl9x 
 //default length is 6 
+
+
+/*function fCheckurl(url){
+    //var newDoc = undefined;
+    //checking url on database
+    //req.protocol + '://' + req.get('host') + '/checkurl/' + final
+    
+    request(url, function (error, response, body) {
+        //console.log('error:', error); // Print the error if one occurred 
+        //console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
+        console.log('body:', JSON.parse(body).docs.length); // Print the HTML for the Google homepage. 
+        //var newDoc = undefined;
+        var checkurl = [];
+        if(error == null){
+            checkurl = JSON.parse(body);
+            if(checkurl.docs.length > 0) newDoc = true;
+            else if (checkurl.docs.length === 0) newDoc = false;
+            else newDoc = false;
+            console.log('newDoc in function->'+newDoc);
+        }
+        
+    });
+    //return newDoc;
+}*/
+
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/views/index.html');
@@ -18,6 +46,7 @@ app.get('/', function(req, res){
 app.get('/new/*', function (req, res) {
     
     //req info VAR
+    //var newDoc = undefined;
     var href = url.parse(req.url).href; //all GET
     //var pahtname = url.parse(req.url).pahtname; //only path
     //var query = url.parse(req.url).query; //only query
@@ -50,18 +79,34 @@ app.get('/new/*', function (req, res) {
         'org_url': final
     };
     
-    /*function callback(res){
+    //check if the url is new, New Doc
+    //fCheckurl(req.protocol + '://' + req.get('host') + '/checkurl/' + final);
+    request(req.protocol + '://' + req.get('host') + '/checkurl/' + final, function (error, response, body) {
+        //console.log('error:', error); // Print the error if one occurred 
+        //console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
+        console.log('body:', JSON.parse(body).docs.length); // Print the HTML for the Google homepage. 
+        //var newDoc = undefined;
+        var checkurl = [];
+        if(error == null){
+            checkurl = JSON.parse(body);
+            if(checkurl.docs.length > 0) newDoc = false;
+            else if (checkurl.docs.length === 0) newDoc = true;
+            else newDoc = true;
+            console.log('newDoc in function->'+newDoc);
+        }
         
-    }*/
-    
-    if(check != null){//if the url is valid
+        //Connect and insert on database
+        if(check != null && newDoc === true){//if the url is valid and it is not on the database
+    console.log('Creating Doc');
     mongo.connect(mongourl+dbname,function(err,db){
+        console.log('mongo connect');
         if(err)throw err;
         var collection = db.collection('shortener');
         //var add = undefined;
 
         //if(add === true && add != undefined){
             collection.insert(myJson,function(err,data){
+                console.log('collection insert');
                 if(err)throw err;
                 console.log(data);
                 res.send({'shortened_URL':req.protocol + '://' + req.get('host') + '/' + myJson.new_id});
@@ -70,10 +115,18 @@ app.get('/new/*', function (req, res) {
         //} 
         
     });
-    }else{
+    }else if(check != null && newDoc === false){
+        res.send({'shortened_URL':req.protocol + '://' + req.get('host') + '/' + checkurl.docs[0].new_id});
+    }else{//if the url is valid
         res.send({'err':'URL not valid'});
     }
-
+        
+        
+    
+    });
+    //console.log('newDoc after function->'+newDoc);
+    
+ 
 });
 
 app.get('/checkurl/*', function (req, res) {
