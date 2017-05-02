@@ -1,7 +1,8 @@
 var port = /*process.env.PORT || 5000 || */8080;//FOR HEROKU port Asignation
 var express = require('express');
 var mongo = require('mongodb').MongoClient;
-var mongourl = "mongodb://localhost:27017/";
+//var mongourl = "mongodb://localhost:27017/";//local
+var mongourl = "mongodb://short:short@ds129281.mlab.com:29281/";//remote
 var dbname = "urlshortener";
 var url = require('url');
 var request = require('request');
