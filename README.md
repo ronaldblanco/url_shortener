@@ -14,8 +14,8 @@ User Story: When I visit that shortened URL, it will redirect me to my original 
 
 Example creation usage:
 
-    https://.../new/https://www.google.com<br>
-    https://.../new/http://foo.com:80<br>
+    https://.../new/https://www.google.com
+    https://.../new/http://foo.com:80
     
     Example creation output:
     
@@ -25,12 +25,12 @@ Example creation usage:
     
     Usage:
     
-        <https://.../FyP</code><br>
-        Will redirect to:<br>
-        https://www.google.com/<br>
+        https://.../FyP
+        Will redirect to:
+        https://www.google.com/
         
     Other Options:
     
-        To Check if a URL or Short ID are in the database:<br>
-        https://.../checkurl/https://www.google.com<br>
-        https://.../checkshort/FyP<br>
+        To Check if a URL or Short ID are in the database:
+        https://.../checkurl/https://www.google.com
+        https://.../checkshort/FyP
