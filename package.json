@@ -1,6 +1,9 @@
 {
   "name": "url_shortener",
   "version": "1.0.0",
+  "engines": {
+    "node": "4.8.4"
+  },
   "description": "url shortener for FreeCodeCamp project",
   "main": "server.js",
   "scripts": {
